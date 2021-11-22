@@ -1,7 +1,7 @@
 /* eslint-env browser */
 const LoadScript = {
   install: function (Vue) {
-    Vue.loadScript = Vue.prototype.$loadScript = function (src) { // eslint-disable-line no-param-reassign
+    Vue.loadScript = Vue.prototype.$loadScript = function (src, attributes = []) { // eslint-disable-line no-param-reassign
       return new Promise(function (resolve, reject) {
         let shouldAppend = false;
         let el = document.querySelector('script[src="' + src + '"]');
@@ -11,6 +11,10 @@ const LoadScript = {
           el.async = true;
           el.src = src;
           shouldAppend = true;
+          
+          attributes.forEach(attr => {
+            el.setAttribute(attr.name, attr.value);
+          })
         }
         else if (el.hasAttribute('data-loaded')) {
           resolve(el);
